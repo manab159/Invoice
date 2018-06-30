@@ -23,7 +23,7 @@ class Invoice_Line(models.Model) :
     price_without_tax = models.FloatField(blank=True,null=True)
     tax_name = models.CharField(max_length=50,blank=True,null=True)
     tax_amount = models.FloatField(blank=True,null=True)
-    line_amount = models.FloatField(blank=True,null=True)
+    line_total = models.FloatField(blank=True,null=True)
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
 
     def __str__(self):
