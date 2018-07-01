@@ -5,6 +5,7 @@ from django.db.models import Sum
 from django.db import transaction
 from django.core import serializers
 import datetime
+import json
 
 @transaction.atomic()
 def fetch_data(request):
@@ -53,6 +54,20 @@ def fetch_invoice_data(request,id):
             invoice_line_obj = Invoice_Line(invoice=id)
             invoice_line_obj.save()
 
+        elif not 'invoice_list' in request.PUT:
+            invoice_obj = Invoice.objects.get(id=id)
+            Invoice_Line.objects.get(invoice=invoice_obj).delete()
+
+        elif 'invoice_list' in request.PUT:
+
+            invoice_line_obj = Invoice_Line.objects.get(id=request.PUT['id'])
+            invoice_line_obj.product = request.PUT['product']
+            invoice_line_obj.quantity = request.PUT['quantity']
+            invoice_line_obj.price_without_tax = request.PUT['price_without_tax']
+            invoice_line_obj.tax_name = request.PUT['tax_name']
+            invoice_line_obj.tax_amount = request.PUT['tax_amount']
+            invoice_line_obj.line_total = request.PUT['line_total']
+            invoice_line_obj.save()
 
 
     if request.method=='DELETE':
@@ -65,4 +80,8 @@ def fetch_invoice_data(request,id):
             return JsonResponse(message , safe=False)
 
 
-
+# def test(request):
+#     if request.method == 'POST':
+#         print(request.POST.get('tax'))
+#         message = {'message' : 'GOT IT'}
+#         return JsonResponse(message , safe=False)
