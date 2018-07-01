@@ -6,5 +6,5 @@ from . import views
 app_name = 'invoice'
 urlpatterns = [
     path('', views.fetch_data, name='fetch_data'),
-    url(r'^users/(?P<user_id>\d+)/$', views.fetch_invoice_data, name='fetch_invoice_data')
+    url(r'^(?P<id>\w+)/$', views.fetch_invoice_data, name='fetch_invoice_data')
 ]
